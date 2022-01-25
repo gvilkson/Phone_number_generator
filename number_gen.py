@@ -1,42 +1,33 @@
 # Use With Python 3
-import colorama
+import os
+try:
+    import colorama
+    from colorama import Style, Fore
+except ModuleNotFoundError:
+    os.system("pip install colorama")
 
-from fontstyle import apply
-from colorama import Style , Fore
-from phonenumbers.phonenumberutil import region_code_for_country_code
-from pyfiglet import figlet_format
-import requests, re, sys, random, time, os
-from colorama import Fore, Back, init
-from random import choice
-import random
-import os,pyfiglet
-from colorama import Fore
-import requests, re, sys, random, time, os, fontstyle
-from threading import Thread
+try:
+    import phonenumbers
+except ModuleNotFoundError:
+    os.system("pip install phonenumbers")
+try:
+    import fontstyle
+except ModuleNotFoundError:
+    os.system("pip install fontstyle")
 
-from random import choice
+import sys, random
 
-
+from setup.banner import  banner2 , banner , clear
+from setup.colors import r, g ,y  ,lg ,w
+clear()
 
 all_col= [Style.BRIGHT+Fore.RED,Style.BRIGHT+Fore.CYAN,Style.BRIGHT+Fore.LIGHTCYAN_EX, Style.BRIGHT+Fore.LIGHTBLUE_EX, Style.BRIGHT+Fore.LIGHTCYAN_EX,Style.BRIGHT+Fore.LIGHTMAGENTA_EX,Style.BRIGHT+Fore.LIGHTYELLOW_EX]
 
 ran = random.choice(all_col)
 
-
-def banner():
-        os.system("clear")
-
-        print(ran, pyfiglet.figlet_format("\tNumber\nGenerator"))
-        print(ran + "\n\t\tV_5.0.5 'Final Realese'\t\n\n")
-        print("*" * 63)
-
-        print(Style.BRIGHT+Fore.LIGHTCYAN_EX, "\n" ,"- " * 4, " [+] Follow me on Instagram @saadkhan041 ", "- " * 4)
-        print(Style.BRIGHT+Fore.LIGHTYELLOW_EX, "\n", "- " * 4, " [+] Follow me on Instagram @coding_memz ", "- " * 4)
-        print(Style.BRIGHT+Fore.LIGHTRED_EX, "\n", "- " * 4, "[+] Github: https://github.com/Saadkhan041/ ", "- " * 3)
-        print("\n" , "*" * 63)
+k = all_col[2]
 
 banner()
-
 def exit():
     sys.exit()
 
@@ -56,13 +47,13 @@ def program():
         code = input(f'{c}Enter the Country Code [like +92 For Pakistan] : ')
         d = random.choice(l)
         print(d, '-' * 33)
-        area_code = input(f'{d}Enter the Area Code [ Like 630 ] : ')
+        area_code = input(f'{d}Enter the Network code [ Like 309] : ')
         e = random.choice(l)
         print('-' * 33)
         n = int(input(f"{e}Enter Amount of numbers: "))
         print(e, '-' * 33)
         f = random.choice(l)
-        lent = int(input(f'{f}Length Remaining Digits [ 7 FOR USA ] : '))
+        lent = int(input(f'{f}Length Remaining Digits [ 10 FOR USA ] : '))
         print(f, '-' * 33)
         mow = str('9' * lent)
         print(c, '-' * 33)
@@ -77,55 +68,67 @@ def program():
         for i in range(0, n):
             rez = code + area_code + number_generator()
             save.write(rez + '\n')
-        print(f'{j}Phone Numbers Saved In phone_numbers.txt')
+        print(f'{j}Phone Numbers Saved In numbers.txt')
 
     except ValueError:
         print(f"{k}\nYou have missed something")
 
 
-    except ModuleNotFoundError:
-        os.system("pip install colorama")
-        os.system("pip install fontstyle")
-        os.system("pip install pyfiglet")
-
     except KeyboardInterrupt:
-        randomcolors("\nHave a good ay :-)")
+        randomcolors("\nHave a good Day :-)")
 
 def view():
     file = open("numbers.txt" , "r")
-    print(ran , "\n\t\tThis is what i've found!\n")
+    print(lg , "\n\t\tThis is what i've found!\n")
     read = file.read()
+    method = read
+    print(f"{ran} {method}")
 
-    print(f"{ran} {read}")
+
+def verification():
+    file = r"numbers.txt"
+
+    nums = [x.strip('\n') for x in open(file , "r").readlines()]
+
+    for n , num in enumerate(nums):
+        print(f"{g}Tyring to verify the number:{str(n)}{w} {num} ({r}{str(n)}/{str(len(nums))}")
+        num = num.replace(" " , "")
+
+        mob = phonenumbers.parse(num)
+
+        print(f"{w}{num} Valid: {y}{phonenumbers.is_valid_number(mob)}")
+        if phonenumbers.is_valid_number(mob) == True:
+            with open("Valid_numbers" , "a+") as fi:
+                fi.write(num)
+        else:
+            pass
 
 
 cont =" "
 while cont != "n" and "no":
-    print(Fore.LIGHTGREEN_EX + "\n\n\t\t[1] Generate Numbers\t\t\n\t\t[2] View Generated Numbers\n\t\t[3] Exit\n ")
+    print(Fore.LIGHTGREEN_EX + "\n\n\t\t[1] Generate Numbers\t\t\n\t\t[2] View Generated Numbers\n\t\t[3] Exit\n\t\t[4] Verify generated numbers\n")
 
-
-    choice = input(ran + "Enter your choice: ")
+    choice = input(ran + "Enter:~ ")
     if choice == "1":
         program()
 
     elif choice == "2":
         view()
 
-
     elif choice == "3":
-        print(ran + "\n\tDont Forget to do following tasks :-)\t\n")
-        print(Fore.CYAN, "- " * 4, " [+] Follow me on Instagram @saadkhan041 ", "- " * 4)
-        print(Fore.LIGHTYELLOW_EX, "\n", "- " * 4, " [+] Follow me on Instagram @coding_memz ", "- " * 4)
-        print(Fore.LIGHTRED_EX, "\n", "- " * 4, "[+] Github: https://github.com/Saadkhan041/ ", "- " * 3)
+        banner2()
         exit()
+
+    elif choice == "4":
+        verification()
 
     else:
-        print(ran + "\nInvalid option")
+        print(r + "\nInvalid option")
         exit()
-    cont = input(ran + "\nDo you want to continue? [y/n]:")
+    cont = input(y + "\nDo you want to continue? [y/n]:")
 
     if cont == "y":
-        os.system("clear")
+        clear()
         banner()
 
 
